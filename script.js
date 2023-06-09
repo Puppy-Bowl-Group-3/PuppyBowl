@@ -4,7 +4,7 @@ const newPlayerFormContainer = document.getElementById('new-player-form');
 // Add your cohort name to the cohortName variable below, replacing the 'COHORT-NAME' placeholder
 const cohortName = '2302-ACC-PT-WEB-PT-D';
 // Use the APIURL variable for fetch requests
-const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}/players`;
+const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/COHORT-NAME/players`;
 
 /**
  * It fetches all players from the API and returns them
@@ -72,9 +72,41 @@ const removePlayer = async (playerId) => {
  * @param playerList - an array of player objects
  * @returns the playerContainerHTML variable.
  */
-const renderAllPlayers = (playerList) => {
+const renderAllPlayers = async (playerList) => {
+    // console.log("hi");
     try {
-        
+        // console.log(playerList);
+        playerContainer.innerHTML = '';
+        playerList.forEach((player) => {
+            // console.log(player.name);
+            const playerElement = document.createElement('div');
+            playerElement.classList.add('player');
+            playerElement.innerHTML = `
+                <h2>${player.name}</h2>
+                <p>${player.breed}</p>
+                <p>${player.status}</p>
+                <p>${player.teamId}</p>
+                <p>${player.cohortId}</p>
+                <button class="details-button" data-id="${player.id}">See Details</button>
+                <button class="delete-button" data-id="${player.id}">Delete</button>
+            `;
+            playerContainer.appendChild(playerElement);
+            const detailsButton = playerElement.querySelector('.details-button');
+            detailsButton.addEventListener('click', (event) => {
+               // your code here
+               event.preventDefault();
+               fetchSinglePlayer(player.id);
+               // console.log(party.id);
+            });
+            // delete player
+            const deleteButton = playerElement.querySelector('.delete-button');
+            deleteButton.addEventListener('click', async (event) => {
+               // your code here
+               event.preventDefault();
+               removePlayer(player.id);
+            
+            });
+        });    
     } catch (err) {
         console.error('Uh oh, trouble rendering players!', err);
     }
@@ -95,7 +127,8 @@ const renderNewPlayerForm = () => {
 
 const init = async () => {
     const players = await fetchAllPlayers();
-    renderAllPlayers(players);
+    // console.log(players.data.players);
+    renderAllPlayers(players.data.players);
 
     renderNewPlayerForm();
 }

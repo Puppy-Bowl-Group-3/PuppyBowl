@@ -4,7 +4,7 @@ const newPlayerFormContainer = document.getElementById('new-player-form');
 // Add your cohort name to the cohortName variable below, replacing the 'COHORT-NAME' placeholder
 const cohortName = '2302-ACC-PT-WEB-PT-D';
 // Use the APIURL variable for fetch requests
-const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}/players`;
+const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/COHORT-NAME/players`;
 
 /**
  * It fetches all players from the API and returns them
@@ -73,44 +73,41 @@ const removePlayer = async (playerId) => {
  * @returns the playerContainerHTML variable.
  */
 const renderAllPlayers = async (playerList) => {
-    // console.log("hi");
     try {
-        // console.log(playerList);
         playerContainer.innerHTML = '';
         playerList.forEach((player) => {
-            // console.log(player.name);
             const playerElement = document.createElement('div');
             playerElement.classList.add('player');
             playerElement.innerHTML = `
                 <h2>${player.name}</h2>
-                <p>Breed: ${player.breed}</p>
-                <p>Status: ${player.status}</p>
-                <p>TeamID: ${player.teamId}</p>
-                <p>CohortID: ${player.cohortId}</p>
+                <p>${player.breed}</p>
+                <p>${player.status}</p>
+                <p>${player.teamId}</p>
+                <p>${player.cohortId}</p>
+                <img src="${player.imageUrl}" alt="${player.name}">
                 <button class="details-button" data-id="${player.id}">See Details</button>
                 <button class="delete-button" data-id="${player.id}">Delete</button>
             `;
             playerContainer.appendChild(playerElement);
+
+            // Add event listeners for buttons
             const detailsButton = playerElement.querySelector('.details-button');
             detailsButton.addEventListener('click', (event) => {
-               // your code here
-               event.preventDefault();
-               fetchSinglePlayer(player.id);
-               // console.log(party.id);
+                event.preventDefault();
+                fetchSinglePlayer(player.id);
             });
-            // delete player
+
             const deleteButton = playerElement.querySelector('.delete-button');
             deleteButton.addEventListener('click', async (event) => {
-               // your code here
-               event.preventDefault();
-               removePlayer(player.id);
-            
+                event.preventDefault();
+                removePlayer(player.id);
             });
-        });    
+        });
     } catch (err) {
         console.error('Uh oh, trouble rendering players!', err);
     }
 };
+
 
 
 /**

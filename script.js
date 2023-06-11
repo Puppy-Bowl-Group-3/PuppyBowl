@@ -44,7 +44,8 @@ const addNewPlayer = async (playerObj) => {
         name: playerObj.name,
         breed: playerObj.breed,
         status: playerObj.status,
-        temaId: playerObj.teamId,
+        teamId: playerObj.teamId,
+        imageUrl: playerObj.imageUrl,
       }),
     });
     const result = await response.json();
@@ -58,10 +59,19 @@ const addNewPlayer = async (playerObj) => {
 
 const removePlayer = async (playerId) => {
   try {
-  } catch (err) {
+    const response = await fetch(`${APIURL}/${playerId}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      console.log("Deleted Player");
+      const players = await fetchAllPlayers();
+      renderAllPlayers(players.data.players);
+    } else {
+      console.error("Error Deleting Player");
+    }
+  } catch (error) {
     console.error(
-      `Whoops, trouble removing player #${playerId} from the roster!`,
-      err
+      `Whoops, trouble removing player #${playerId} from the roster!`
     );
   }
 };

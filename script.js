@@ -4,7 +4,7 @@ const newPlayerFormContainer = document.getElementById("new-player-form");
 // Add your cohort name to the cohortName variable below, replacing the 'COHORT-NAME' placeholder
 const cohortName = "2302-ACC-PT-WEB-PT-D";
 // Use the APIURL variable for fetch requests
-const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/COHORT-NAME/players`;
+const APIURL = `https://fsa-puppy-bowl.herokuapp.com/api/${cohortName}/players`;
 
 /**
  * It fetches all players from the API and returns them
@@ -23,9 +23,11 @@ const fetchAllPlayers = async () => {
 };
 
 const fetchSinglePlayer = async (playerId) => {
+  console.log(playerId);
+
   try {
-    const response = await fetch(`${APIURL}/${id}`);
-    const singlePlayer = response.json;
+    const response = await fetch(`${APIURL}/${playerId}`);
+    const singlePlayer = await response.json();
     return singlePlayer;
   } catch (err) {
     console.error(`Oh no, trouble fetching player #${playerId}!`, err);
@@ -59,6 +61,7 @@ const addNewPlayer = async (playerObj) => {
 
 const removePlayer = async (playerId) => {
   try {
+
     const response = await fetch(`${APIURL}/${playerId}`, {
       method: "DELETE",
     });
@@ -122,7 +125,7 @@ const renderAllPlayers = async (playerList) => {
       detailsButton.addEventListener("click", (event) => {
         // your code here
         event.preventDefault();
-        fetchSinglePlayer(player.id);
+        renderSinglePlayerById(player.id);
         // console.log(party.id);
       });
       // delete player
@@ -196,6 +199,30 @@ const renderNewPlayerForm = () => {
     }
   });
 };
+
+const renderSinglePlayerById = async (playerID) => {
+  try {
+    console.log(playerID);
+    const player = await fetchSinglePlayer(playerID);
+    // console.log(player.data.player);
+    let playerHTML = `
+      <h2 style="font-size: 1.2rem;">${player.data.player.name}</h2>
+      <p style="font-size: 1.2rem;">Breed: ${player.data.player.breed}</p>
+      <p style="font-size: 1.2rem;">Field status: ${player.data.player.status}</p>
+      <p style="font-size: 1.2rem;">TeamID: ${player.data.player.teamId}</p>
+      <p style="font-size: 1.2rem;">CohortID: ${player.data.player.cohortId}</p>
+      <button class="close-button">Close</button>
+    `;
+    playerContainer.innerHTML = playerHTML;
+    const closeButton = playerContainer.querySelector('.close-button');
+    closeButton.addEventListener('click', async () => {
+      const player = await fetchAllPlayers();
+      renderAllPlayers(player.data.players);
+    });
+  }catch(error){
+    console.error(error);
+  }
+}
 
 const init = async () => {
   const players = await fetchAllPlayers();

@@ -107,13 +107,15 @@ const renderAllPlayers = async (playerList) => {
       playerElement.classList.add("player");
       playerElement.innerHTML = `
                 <h2>${player.name}</h2>
-                <p>${player.breed}</p>
-                <p>${player.status}</p>
-                <p>${player.teamId}</p>
-                <p>${player.cohortId}</p>
+                <p>Breed: ${player.breed}</p>
+                <p>Field status: ${player.status}</p>
+                <p>TeamID: ${player.teamId}</p>
+                <p>CohortID: ${player.cohortId}</p>
                 <img src="${player.imageUrl}" alt="${player.name}">
-                <button class="details-button" data-id="${player.id}">See Details</button>
-                <button class="delete-button" data-id="${player.id}">Delete</button>
+                <div class="buttonz">
+                  <button class="details-button" data-id="${player.id}">See Details</button>
+                  <button class="delete-button" data-id="${player.id}">Delete</button>
+                </div>
             `;
       playerContainer.appendChild(playerElement);
       const detailsButton = playerElement.querySelector(".details-button");
@@ -144,18 +146,18 @@ const renderNewPlayerForm = () => {
   // Add player form
   let formHtml = `
         <form>
-        <label for="playerName">New Player</label>
+        <label for="playerName">New Player:</label>
         <input type="text" id="playerName" name="playerName" placeholder="Player Name">
-        <label for="breed">Player Breed</label>
+        <label for="breed">Player Breed:</label>
         <input type="text" id="breed" name="breed" placeholder="Player Breed">
-        <label for="status">Player Status</label>
+        <label for="status">Player Status:</label>
         <select id="status" name="status"> 
             <option value="bench">bench</option> 
             <option value="field">field</option>
         </select>
-        <label for="imageUrl">Player Photo URL</label>
+        <label for="imageUrl">Player Photo URL:</label>
         <input type="text" id="imageUrl" name="imageUrl" placeholder="Photo URL http://...">
-        <label for="teamId">Team</label>
+        <label for="teamId">Team:</label>
         <input type="text" id="teamId" name="teamId" placeholder="null">
         <button type="submit">Add Player</button>
         </form>

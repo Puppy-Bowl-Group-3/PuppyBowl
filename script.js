@@ -71,7 +71,7 @@ const removePlayer = async (playerId) => {
     }
   } catch (error) {
     console.error(
-      `Whoops, trouble removing player #${playerId} from the roster!`
+      `Whoops, trouble removing player #${playerId} from the roster!`, err
     );
   }
 };
@@ -161,7 +161,7 @@ const renderNewPlayerForm = () => {
         </form>
         `;
 
-  newPlayerFormContainer.innerHTML = formHtml;
+   newPlayerFormContainer.innerHTML = formHtml;
 
   let form = newPlayerFormContainer.querySelector("form");
   // event listener on "submit" for "Add Player" button
